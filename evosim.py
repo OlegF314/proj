@@ -1,5 +1,6 @@
 from tkinter import *
 from random import *
+import matplotlib.pyplot as plt
 
 
 WIDTH = 48
@@ -7,6 +8,7 @@ HEIGHT = 27
 SIZE = 30
 MODES = 5
 MAP = open("map.evo", "r")
+plt.plot([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
 root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
