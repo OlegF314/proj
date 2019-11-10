@@ -5,20 +5,30 @@ from random import *
 WIDTH = 48
 HEIGHT = 27
 SIZE = 30
+MODES = 5
 MAP = open("map.evo", "r")
 root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
+genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
+bots = [[20 + i // 8, 10 + i % 8, 20] for i in range(64)]
+alive = 64
+map = []
+for i in range(HEIGHT):
+    map.append(list(MAP.readline()))
 
-
-def create_field():
-    field = MAP.readlines()
+def create_field():#20-27x10-17
     for i in range(HEIGHT):
         for j in range(WIDTH):
-            if field[i][j] == '1':
+            if map[i][j] == '*':
                 canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill="brown")
             else:
                 canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill="lightblue")
+    for i in range(64):
+        canv.create_rectangle(SIZE * (20 + i // 8), SIZE * (10 + i % 8), SIZE * ((20 + i // 8) + 1), SIZE * ((10 + i % 8) + 1), fill="red")
+
+#def step1():
+
 
 
 create_field()
