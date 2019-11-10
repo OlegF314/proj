@@ -13,14 +13,14 @@ canv.pack()
 genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
 bots = [[20 + i // 8, 10 + i % 8, 20] for i in range(64)]
 alive = 64
-map = []
+map1 = []
 for i in range(HEIGHT):
-    map.append(list(MAP.readline()))
+    map1.append(list(MAP.readline()))
 
 def create_field():#20-27x10-17
     for i in range(HEIGHT):
         for j in range(WIDTH):
-            if map[i][j] == '*':
+            if map1[i][j] == '*':
                 canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill="brown")
             else:
                 canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill="lightblue")
