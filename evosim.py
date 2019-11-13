@@ -20,9 +20,9 @@ genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in ra
 bots = [[20 + i // 8, 10 + i % 8, 20, 0, 0] for i in range(64)]
 alive = 64
 map1 = []
-botnum = 1
-turn_end = 1  # Номер бота=1                          #Флаг на окончание хода               #Число ботов
-overload = 0
+botnum = 1                          #Номер текущего бота 
+turn_end = False                        #Флаг на окончание хода               
+overload = 0                        #Число ботов
 
 
 for i in range(HEIGHT):
@@ -82,7 +82,7 @@ def mainfunc():
         overload = 0
         turn_end = 1
         mainfunc()
-    if turn_end == 0 or overload == 10:  # Смена хода
+    if turn_end or overload == 10:  # Смена хода
         botnum += 1
         overload = 0
         turn_end = 1
