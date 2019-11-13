@@ -17,6 +17,15 @@ canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
 genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
 bots = [[20 + i // 8, 10 + i % 8, 20, 0, 0] for i in range(64)]
+#[0] - y
+#[1] - x
+#[2] - HP
+#[3] - orientation:
+#7 0 1
+#6 b 2
+#5 4 3
+#[4] - genome pointer
+#[5] - graphic rectangle
 alive = 64
 map1 = []
 for i in range(HEIGHT):
