@@ -16,7 +16,7 @@ root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
 genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
-bots = [[20 + i // 8, 10 + i % 8, 20] for i in range(64)]
+bots = [[20 + i // 8, 10 + i % 8, 20, 0, 0] for i in range(64)]
 alive = 64
 map1 = []
 for i in range(HEIGHT):
@@ -42,11 +42,11 @@ def create_field():#20-27x10-17
                                       (i + 1) * SIZE,
                                       fill="lightblue")
     for i in range(64):
-        canv.create_rectangle(SIZE * (20 + i // 8),
-                              SIZE * (10 + i % 8),
-                              SIZE * ((20 + i // 8) + 1),
-                              SIZE * ((10 + i % 8) + 1),
-                              fill="red")
+        bots[i].append(canv.create_rectangle(SIZE * (20 + i // 8),
+                                             SIZE * (10 + i % 8),
+                                             SIZE * ((20 + i // 8) + 1),
+                                             SIZE * ((10 + i % 8) + 1),
+                                             fill="red"))
 
 #def step1():
 
