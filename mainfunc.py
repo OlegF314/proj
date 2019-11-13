@@ -18,8 +18,6 @@ def mainfunc():
         botnum+=1
     if numofbots==8 :
         mutate()            #мутатор
-
-
     mainfunc()
 
 
