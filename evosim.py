@@ -1,6 +1,7 @@
 from tkinter import *
-from random import *
-import matplotlib.pyplot as plt
+
+# from random import *
+# import matplotlib.pyplot as plt
 
 
 WIDTH = 48
@@ -9,7 +10,6 @@ SIZE = 30
 MODES = 5
 movey = [-1, -1, 0, 1, 1, 1, 0, -1]
 movex = [0, 1, 1, 1, 0, -1, -1, -1]
-movegen = {"p" : 1, "*" : 2, "b" : 3, "f" : 4, "0" : 5}
 MAP = open("map.evo", "r")
 plt.plot([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
 plt.show()
@@ -18,27 +18,25 @@ canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
 genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
 bots = [[20 + i // 8, 10 + i % 8, 20, 0, 0] for i in range(64)]
-#[0] - y
-#[1] - x
-#[2] - HP
-#[3] - orientation:
-#7 0 1
-#6 b 2
-#5 4 3
-#[4] - genome pointer
-#[5] - graphic rectangle
 alive = 64
 map1 = []
+botnum = 1
+turn_end = 1  # Номер бота=1                          #Флаг на окончание хода               #Число ботов
+overload = 0
+
+
 for i in range(HEIGHT):
     map1.append(list(MAP.readline()))
 for i in range(64):
     map1[10 + i % 8][20 + i // 8] = "b"
-#0 = empty
-#* = wall
-#p = poison
-#f = food
-#b = bot
-def create_field():#20-27x10-17
+
+
+# 0 = empty
+# * = wall
+# p = poison
+# f = food
+# b = bot
+def create_field():  # 20-27x10-17
     for i in range(HEIGHT):
         for j in range(WIDTH):
             if map1[i][j] == '*':
@@ -49,7 +47,7 @@ def create_field():#20-27x10-17
                                       fill="brown")
             else:
                 canv.create_rectangle(j * SIZE,
-                                      i * SIZE, 
+                                      i * SIZE,
                                       (j + 1) * SIZE,
                                       (i + 1) * SIZE,
                                       fill="lightblue")
@@ -60,8 +58,35 @@ def create_field():#20-27x10-17
                                              SIZE * ((10 + i % 8) + 1),
                                              fill="red"))
 
-#def step1():
 
+# def step1():
+
+
+def mainfunc():
+    global botnum, overload, turn_end  # Объявление глобальных переменных
+    if botnum == 1:
+        gen_food()  # Генерация еды
+    act = genome [botnum] [bots [botnum] [4] ] // 8  # Тут надо вынуть цифру из массива bots и преобразовать к человеческому блен виду чтобы сунуть в switcher
+    switcher = {  # Словарь который послужит переключателем команд
+        1: grab,  # Тут написаны имена мини-функций
+        2: attack,
+        3: turn,
+        4: move,
+        5: look,
+    }
+    root.after(10,switcher[act]())  # По ключу переходит к функции, аргументы функции задаются в ()
+    bots[botnum][2] -= 1
+    if alive == 8:
+        mutate()  # мутатор
+        botnum = 1
+        overload = 0
+        turn_end = 1
+        mainfunc()
+    if turn_end == 0 or overload == 10:  # Смена хода
+        botnum += 1
+        overload = 0
+        turn_end = 1
+    mainfunc()
 
 
 create_field()
