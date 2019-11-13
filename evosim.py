@@ -30,11 +30,23 @@ def create_field():#20-27x10-17
     for i in range(HEIGHT):
         for j in range(WIDTH):
             if map1[i][j] == '*':
-                canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill="brown")
+                canv.create_rectangle(j * SIZE,
+                                      i * SIZE,
+                                      (j + 1) * SIZE,
+                                      (i + 1) * SIZE,
+                                      fill="brown")
             else:
-                canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill="lightblue")
+                canv.create_rectangle(j * SIZE,
+                                      i * SIZE, 
+                                      (j + 1) * SIZE,
+                                      (i + 1) * SIZE,
+                                      fill="lightblue")
     for i in range(64):
-        canv.create_rectangle(SIZE * (20 + i // 8), SIZE * (10 + i % 8), SIZE * ((20 + i // 8) + 1), SIZE * ((10 + i % 8) + 1), fill="red")
+        canv.create_rectangle(SIZE * (20 + i // 8),
+                              SIZE * (10 + i % 8),
+                              SIZE * ((20 + i // 8) + 1),
+                              SIZE * ((10 + i % 8) + 1),
+                              fill="red")
 
 #def step1():
 
