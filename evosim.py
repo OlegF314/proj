@@ -80,12 +80,12 @@ def mainfunc():
         mutate()                    # мутатор
         botnum = 1
         overload = 0
-        turn_end = 1
+        turn_end = False
         mainfunc()
     if turn_end or overload == 10:  # Смена хода
         botnum += 1
         overload = 0
-        turn_end = 1
+        turn_end = False
     mainfunc()
 
 
