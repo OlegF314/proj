@@ -21,7 +21,11 @@ alive = 64
 map1 = []
 for i in range(HEIGHT):
     map1.append(list(MAP.readline()))
-
+#0 = empty
+#* = wall
+#p = poison
+#f = food
+#b = bot
 def create_field():#20-27x10-17
     for i in range(HEIGHT):
         for j in range(WIDTH):
