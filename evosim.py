@@ -7,6 +7,8 @@ WIDTH = 48
 HEIGHT = 27
 SIZE = 30
 MODES = 5
+movey = [-1, -1, 0, 1, 1, 1, 0, -1]
+movex = [0, 1, 1, 1, 0, -1, -1, -1]
 MAP = open("map.evo", "r")
 plt.plot([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
 plt.show()
