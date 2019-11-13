@@ -9,6 +9,7 @@ SIZE = 30
 MODES = 5
 movey = [-1, -1, 0, 1, 1, 1, 0, -1]
 movex = [0, 1, 1, 1, 0, -1, -1, -1]
+movegen = {"p" : 1, "*" : 2, "b" : 3, "f" : 4, "0" : 5}
 MAP = open("map.evo", "r")
 plt.plot([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
 plt.show()
