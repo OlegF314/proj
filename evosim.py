@@ -21,6 +21,8 @@ alive = 64
 map1 = []
 for i in range(HEIGHT):
     map1.append(list(MAP.readline()))
+for i in range(64):
+    map1[10 + i % 8][20 + i // 8] = "b"
 #0 = empty
 #* = wall
 #p = poison
