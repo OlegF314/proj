@@ -3,7 +3,7 @@ def  gen_food():
     while k != 10 :
          z = random.randint(0,26)
          m = random.randint(0,47) 
-         if map1[z][m] == ”0” :
+         if map1[z][m] not in [”*”, "b"]:
              map1[z][m] = “f”
              canv.create_rectangle(m * SIZE, z * SIZE, (m + 1) * SIZE, (z + 1) * SIZE, fill="green")
              k += 1 
@@ -11,7 +11,7 @@ def  gen_food():
     while k != 15 :
         z = random.randint(0,26)
         m = random.randint(0,47) 
-        if map1[z][m] == ”0” :
+        if map1[z][m] not in [”*”, "b"]:
             map1[z][m] = “p”
             canv.create_rectangle(m * SIZE, z * SIZE, (m + 1) * SIZE, (z + 1) * SIZE, fill = "purple")
             k+=1
