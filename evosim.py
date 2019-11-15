@@ -66,24 +66,28 @@ def mainfunc():
     global botnum, overload, turn_end,bots,genome # Объявление глобальных переменных
     if botnum == 1:
         gen_food()                     # Генерация еды
-    if genomes [botnum] [bots [botnum] [4] ] > 39:
-        act = (genomes [botnum] [bots [botnum] [4] ] - 39) // 8 
-        else act = genomes [botnum] [bots [botnum] [4] ] // 8
+    while genomes [botnum] [bots [botnum] [4] ] > 39:
+        bots[botnum][4] = (bots[botnum][4] + genomes[botnum][bots[botnum][4]]) %80
+        overload += 1
+        if overload == 10:
+            botnum = (1 if botnum == alive - 1 else botnum + 1)
+            overload = 0
+            turn_end = False
+            mainfunc()
+        act = genomes [botnum] [bots [botnum] [4]] // 8
      switcher = {  # Словарь который послужит переключателем команд
-        1: grab,  # Тут написаны имена мини-функций
-        2: attack,
-        3: turn,
-        4: move,
-        5: look,
+        0: grab,  # Тут написаны имена мини-функций
+        1: attack,
+        2: turn,
+        3: move,
+        4: look,
     }
-    root.after(10,switcher[act]())  # По ключу переходит к функции, аргументы функции задаются в ()
-    bots[botnum][2] -= 1            #Скушал хп у бота
-    if bots[botnum][2] == 0:
-        dead(botnum)
+    root.after(10, lambda: switcher[act]((genomes[botnum][bots[botnum][4]] + bots[botnum][3]) % 8))  # По ключу переходит к функции
     if turn_end or overload == 10:  # Смена хода
-        if botnum == alive:
-            botnum=1
-            else botnum += 1
+        bots[botnum][2] -= 1            #Скушал хп у бота -
+        if bots[botnum][2] == 0:
+            dead(botnum)
+        botnum = (1 if botnum == alive - 1 else botnum + 1)
         overload = 0
         turn_end = False
     mainfunc()
