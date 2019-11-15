@@ -66,9 +66,9 @@ def mainfunc():
     global botnum, overload, turn_end,bots,genome # Объявление глобальных переменных
     if botnum == 1:
         gen_food()                     # Генерация еды
-    if genome [botnum] [bots [botnum] [4] ] > 39:
-        act = (genome [botnum] [bots [botnum] [4] ] - 39) // 8 
-        else act = genome [botnum] [bots [botnum] [4] ] // 8
+    if genomes [botnum] [bots [botnum] [4] ] > 39:
+        act = (genomes [botnum] [bots [botnum] [4] ] - 39) // 8 
+        else act = genomes [botnum] [bots [botnum] [4] ] // 8
      switcher = {  # Словарь который послужит переключателем команд
         1: grab,  # Тут написаны имена мини-функций
         2: attack,
