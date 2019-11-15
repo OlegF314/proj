@@ -66,8 +66,10 @@ def mainfunc():
     global botnum, overload, turn_end,bots,genome # Объявление глобальных переменных
     if botnum == 1:
         gen_food()                     # Генерация еды
-    act = genome [botnum] [bots [botnum] [4] ] // 8  # Тут надо вынуть цифру из массива bots и преобразовать к человеческому блен виду чтобы сунуть в switcher
-    switcher = {  # Словарь который послужит переключателем команд
+    if genome [botnum] [bots [botnum] [4] ] > 39:
+        act = (genome [botnum] [bots [botnum] [4] ] - 39) // 8 
+        else act = genome [botnum] [bots [botnum] [4] ] // 8
+     switcher = {  # Словарь который послужит переключателем команд
         1: grab,  # Тут написаны имена мини-функций
         2: attack,
         3: turn,
@@ -76,14 +78,12 @@ def mainfunc():
     }
     root.after(10,switcher[act]())  # По ключу переходит к функции, аргументы функции задаются в ()
     bots[botnum][2] -= 1            #Скушал хп у бота
-    if alive == 8:
-        mutate()                    # мутатор
-        botnum = 1
-        overload = 0
-        turn_end = False
-        mainfunc()
+    if bots[botnum][2] == 0:
+        dead(botnum)
     if turn_end or overload == 10:  # Смена хода
-        botnum += 1
+        if botnum == alive:
+            botnum=1
+            else botnum += 1
         overload = 0
         turn_end = False
     mainfunc()
