@@ -11,7 +11,7 @@ root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
 genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
-bots = [[20 + i // 8, 10 + i % 8, 20, 0, 0] for i in range(64)]
+bots = [[10 + i % 8, 20 + i // 8, 20, 0, 0] for i in range(64)]
 #[0] - y
 #[1] - x
 #[2] - HP
@@ -54,7 +54,7 @@ def handover():
     bots[botnum][2] -= 1        #Скушал хп у бота
     if bots[botnum][2] == 0:
         dead(botnum)
-    if botnum == alive:
+    if botnum == alive - 1:
         botnum = 1
         gen_time += 1
     else:
@@ -160,16 +160,16 @@ def dead(bot):
                           SIZE * (bots[bot][1] + 1),
                           SIZE * (bots[bot][0] + 1),
                           fill="lightblue")
-    bots = bots[:bot] + bots[bot + 1:] + bots[bot]
+    bots = bots[:bot] + bots[bot + 1:] + [bots[bot]]
     alive -= 1
     botnum -= 1
     if alive == 8:
         mutate()
 
 
-def  gen_food():
+def gen_food():
     k = 0
-    while k != 10 :
+    while k != 5 :
         z = randint(0,26)
         m = randint(0,47)
         if map1[z][m] not in ["*", "b"]:
@@ -177,7 +177,7 @@ def  gen_food():
             canv.create_rectangle(m * SIZE, z * SIZE, (m + 1) * SIZE, (z + 1) * SIZE, fill="green")
             k += 1
     k = 0
-    while k != 15 :
+    while k != 7 :
         z = randint(0,26)
         m = randint(0,47)
         if map1[z][m] not in ["*", "b"]:
@@ -221,29 +221,29 @@ def mainfunc():
     global botnum, overload, turn_end,bots,genomes # Объявление глобальных переменных
     if botnum == 1:
         gen_food()                     # Генерация еды
-    print(botnum, bots[botnum], genomes[botnum], sep="\t")
+
     while genomes[botnum][bots[botnum][4]]>39:
         overload += 1
         bots[botnum][4] = (bots[botnum][4] + genomes[botnum][bots[botnum][4]]) % 80
         if overload == 10:
-            handover()                 #Вызов функции передачи хода
+            handover()       #Вызов функции передачи хода
     act = genomes[botnum][bots[botnum][4]] // 8
     n = genomes[botnum][bots[botnum][4]] % 8
     switcher = {  # Словарь который послужит переключателем команд
-        1: grab,  # Тут написаны имена мини-функций
+        0: move,  # Тут написаны имена мини-функций
+        1: grab,
         2: attack,
         3: turn,
-        4: move,
-        5: look,
+        4: look
     }
-    root.after(10, lambda: switcher[act](n))  # По ключу переходит к функции, аргументы функции задаются в ()
+    switcher[act](n)  # По ключу переходит к функции, аргументы функции задаются в ()
     if turn_end or overload == 10:  # Смена хода
         handover()
     root.after(10, mainfunc)
 
 
-print(genomes)
-print(bots)
+
+
 create_field()
 mainfunc()
 mainloop()
