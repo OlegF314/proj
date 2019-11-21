@@ -1,6 +1,5 @@
 from tkinter import *
 from random import *
-import matplotlib.pyplot as plt
 
 WIDTH = 48
 HEIGHT = 27
@@ -40,6 +39,7 @@ for i in range(HEIGHT):
     map1.append(list(list(MAP.readline())))
 for i in range(64):
     map1[10 + i % 8][20 + i // 8] = "b"
+print(*map1, sep="\n")
 for i in range(HEIGHT):
     map2.append([canv.create_rectangle(j * SIZE, i * SIZE, (j + 1) * SIZE, (i + 1) * SIZE, fill=colors[map1[i][j]]) for j in range(WIDTH)])
 
@@ -121,10 +121,10 @@ def move(n):
         bots[botnum][2] += 10
         map1[y1][x1] = "b"
         map1[bots[botnum][0]][bots[botnum][1]] = "0"
-        bots[botnum][0] = y1
-        bots[botnum][1] = x1
         canv.itemconfig(map2[bots[botnum][0]][bots[botnum][1]], fill="lightblue")
         canv.itemconfig(map2[y1][x1], fill="red")
+        bots[botnum][0] = y1
+        bots[botnum][1] = x1
     elif cell == "p":
         dead(botnum)
     elif cell == "0":
@@ -144,7 +144,8 @@ def dead(bot):
     canv.itemconfig(map2[bots[bot][0]][bots[bot][1]], fill="lightblue")
     bots = bots[:bot] + bots[bot + 1:] + [bots[bot]]
     alive -= 1
-    botnum -= 1
+    if botnum >= bot:
+        botnum -= 1
     if alive == 8:
         mutate()
 
@@ -196,7 +197,7 @@ def mutate():
 
 def mainfunc():
     global botnum, overload, turn_end,bots,genomes # Объявление глобальных переменных
-    if botnum == 1:
+    if botnum == 0:
         gen_food()                     # Генерация еды
 
     while genomes[botnum][bots[botnum][4]]>39:
@@ -216,7 +217,7 @@ def mainfunc():
     switcher[act](n)  # По ключу переходит к функции, аргументы функции задаются в ()
     if turn_end or overload == 10:  # Смена хода
         handover()
-    root.after(10, mainfunc)
+    root.after(1, mainfunc)
 
 
 
