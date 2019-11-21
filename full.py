@@ -52,7 +52,7 @@ for i in range(HEIGHT):
 def handover():
     global botnum, overload, turn_end, bots, genomes, gen_time
     bots[botnum][2] -= 1        #Скушал хп у бота
-    if bots[botnum][2] == 0:
+    if bots[botnum][2] <= 0:
         dead(botnum)
     if botnum == alive - 1:
         botnum = 0
@@ -152,7 +152,7 @@ def dead(bot):
 
 def gen_food():
     k = 0
-    while k != 5 :
+    while k != 2 :
         z = randint(0,26)
         m = randint(0,47)
         if map1[z][m] not in ["*", "b"]:
@@ -160,7 +160,7 @@ def gen_food():
             canv.itemconfig(map2[z][m], fill="green")
             k += 1
     k = 0
-    while k != 7 :
+    while k != 3 :
         z = randint(0,26)
         m = randint(0,47)
         if map1[z][m] not in ["*", "b"]:
