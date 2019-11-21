@@ -72,7 +72,7 @@ def grab(n):
         canv.itemconfig(map2[y1][x1], fill="green")
     elif map1[y1][x1] == "f":
         map1[y1][x1] = "0"
-        bots[botnum][2] += 10
+        bots[botnum][2] = min(bots[botnum][2] + 10, 90)
         canv.itemconfig(map2[y1][x1], fill="lightblue")
     bots[botnum][4] = (bots[botnum][4] + movegen[map1[y1][x1]]) % 80
 
@@ -89,7 +89,7 @@ def attack(n):
         for i in range(alive):
             if bots[i][0] == y1 and bots[i][1] == x1:
                 bots[i][2] -= 10
-                bots[botnum][2] += 10
+                bots[botnum][2] = min(bots[botnum][2] + 10, 90)
                 if bots[i][2] <= 0:
                     dead(i)
     bots[botnum][4] = (bots[botnum][4] + movegen[map1[y1][x1]]) % 80
@@ -118,7 +118,7 @@ def move(n):
     cell = map1[y1][x1]
     if cell == "f":
         canv.itemconfig(map2[y1][x1], fill="lightblue")
-        bots[botnum][2] += 10
+        bots[botnum][2] = min(bots[botnum][2] + 10, 90)
         map1[y1][x1] = "b"
         map1[bots[botnum][0]][bots[botnum][1]] = "0"
         canv.itemconfig(map2[bots[botnum][0]][bots[botnum][1]], fill="lightblue")
