@@ -199,24 +199,27 @@ def mainfunc():
     global botnum, overload, turn_end,bots,genomes # Объявление глобальных переменных
     if botnum == 0:
         gen_food()                     # Генерация еды
-
+    flag = True
     while genomes[botnum][bots[botnum][4]]>39:
         overload += 1
         bots[botnum][4] = (bots[botnum][4] + genomes[botnum][bots[botnum][4]]) % 80
         if overload == 10:
+            flag = False
             handover()       #Вызов функции передачи хода
-    act = genomes[botnum][bots[botnum][4]] // 8
-    n = genomes[botnum][bots[botnum][4]] % 8
-    switcher = {  # Словарь который послужит переключателем команд
+            break
+    if flag:
+        act = genomes[botnum][bots[botnum][4]] // 8
+        n = genomes[botnum][bots[botnum][4]] % 8
+        switcher = {  # Словарь который послужит переключателем команд
         0: move,  # Тут написаны имена мини-функций
         1: grab,
         2: attack,
         3: turn,
         4: look
-    }
-    switcher[act](n)  # По ключу переходит к функции, аргументы функции задаются в ()
-    if turn_end or overload == 10:  # Смена хода
-        handover()
+        }
+        switcher[act](n)  # По ключу переходит к функции, аргументы функции задаются в ()
+        if turn_end or overload == 10:  # Смена хода
+            handover()
     root.after(1, mainfunc)
 
 
