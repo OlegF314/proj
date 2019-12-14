@@ -1,17 +1,20 @@
 from tkinter import *
 from random import *
+import matplotlib.pyplot as plt
 import sys
 
 WIDTH = 48
 HEIGHT = 27
 SIZE = 30
 MODES = 5
-MAP = open("map1.evo", "r")
+MUTATION_STRENGTH = 5
+MAP = open("map.evo", "r")
 root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
 flag1 = False
-genomes = [[randint(0, 79) for i in range(80)] for j in range(64)]
+lifetimes = []
+genomes = [[randint(32, 39) for i in range(80)] for j in range(64)]
 #[list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
 bots = [[10 + i % 8, 20 + i // 8, 20, 0, 0] for i in range(64)]
 # [0] - y
@@ -186,7 +189,7 @@ def gen_food():
             canv.itemconfig(map2[z][m], fill="green")
             k += 1
     k = 0
-    while k != 1:
+    while k != 2:
         z = randint(0, 26)
         m = randint(0, 47)
         if map1[z][m] not in ["*", "b"]:
@@ -197,11 +200,13 @@ def gen_food():
 
 
 def mutate():
-    global alive, turn_end, overload, botnum, flag1
+    global alive, turn_end, overload, botnum, flag1, gen_time
     #    print('\n'.join(map(''.join, map1)), end='\n\n')
     #print(sum(map1[i].count('b') for i in range(27)), alive)
     root.bind("<Key>", finish)
     alive = 64
+    lifetimes.append(gen_time)
+    gen_time = 0
     turn_end = False
     overload = 0
     botnum = 0
@@ -209,6 +214,8 @@ def mutate():
         for j in range(1, 9):
             sys.stdout = open("outgenome" + str(j) + ".evo", "w")
             print(*genomes[j])
+        plt.plot(list(range(len(lifetimes))), lifetimes)
+        plt.show()
         sys.exit()
     for i in range(64):
         genomes[i] = genomes[i % 8][:]
@@ -217,9 +224,10 @@ def mutate():
         gen_bot(i)
         canv.itemconfig(map2[bots[i][0]][bots[i][1]], fill="red")
     for i in range(8):
-        for j in range(6):
+        for j in range(MUTATION_STRENGTH):
             #canv.itemconfig(map2[bots[i][0]][bots[i][1]], fill="HotPink2")
             genomes[i][randint(0, 79)] = randint(0, 79)
+    shuffle(genomes)
 
 
 # def step1():
