@@ -1,17 +1,18 @@
 from tkinter import *
 from random import *
 import sys
-from typing import List, Any
 
 WIDTH = 48
 HEIGHT = 27
 SIZE = 30
 MODES = 5
-MAP = open("map.evo", "r")
+MAP = open("map1.evo", "r")
 root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
-genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
+flag1 = False
+genomes = [[randint(0, 79) for i in range(80)] for j in range(64)]
+#[list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
 bots = [[10 + i % 8, 20 + i // 8, 20, 0, 0] for i in range(64)]
 # [0] - y
 # [1] - x
@@ -39,8 +40,21 @@ colors = {"*": "brown",
           "b": "red"}
 for i in range(HEIGHT):
     map1.append(list(list(MAP.readline().strip())))
+
+
+def gen_bot(i):
+    y = randint(0, 26)
+    x = randint(0, 47)
+    while map1[y][x] in ["*", "b"]:
+        y = randint(1, 25)
+        x = randint(1, 46)
+    map1[y][x] = "b"
+    bots[i][0] = y
+    bots[i][1] = x
+
+
 for i in range(64):
-    map1[10 + i % 8][20 + i // 8] = "b"
+    gen_bot(i)
 
 for i in range(HEIGHT):
     map2.append(
@@ -53,6 +67,11 @@ for i in range(HEIGHT):
 # p = poison
 # f = food
 # b = bot
+def finish(event):
+    global flag1
+    if event.keysym == "space":
+        flag1 = True
+
 
 def handover():
     global botnum, overload, turn_end, bots, genomes, gen_time
@@ -61,6 +80,7 @@ def handover():
         dead(botnum)
     if botnum == alive - 1:
         botnum = 0
+        gen_food()
         gen_time += 1
     else:
         botnum += 1
@@ -158,7 +178,7 @@ def dead(bot):
 
 def gen_food():
     k = 0
-    while k != 2:
+    while k != 1:
         z = randint(0, 26)
         m = randint(0, 47)
         if map1[z][m] not in ["*", "b"]:
@@ -166,7 +186,7 @@ def gen_food():
             canv.itemconfig(map2[z][m], fill="green")
             k += 1
     k = 0
-    while k != 3:
+    while k != 1:
         z = randint(0, 26)
         m = randint(0, 47)
         if map1[z][m] not in ["*", "b"]:
@@ -175,33 +195,30 @@ def gen_food():
             k += 1
 
 
+
 def mutate():
-    global alive, turn_end, overload, botnum
+    global alive, turn_end, overload, botnum, flag1
     #    print('\n'.join(map(''.join, map1)), end='\n\n')
-    print(sum(map1[i].count('b') for i in range(27)), alive)
+    #print(sum(map1[i].count('b') for i in range(27)), alive)
+    root.bind("<Key>", finish)
     alive = 64
     turn_end = False
     overload = 0
     botnum = 0
-    qwer = sum([map1[i].count("b") for i in range(27)])
-    if alive < qwer:
-        print(*map1, sep="\n")
+    if flag1:
+        for j in range(1, 9):
+            sys.stdout = open("outgenome" + str(j) + ".evo", "w")
+            print(*genomes[j])
         sys.exit()
     for i in range(64):
         genomes[i] = genomes[i % 8][:]
         bots[i][2] = 20
     for i in range(8, 64):
-        y = randint(0, 26)
-        x = randint(0, 47)
-        while map1[y][x] in ["*", "b"]:
-            y = randint(1, 25)
-            x = randint(1, 46)
-        map1[y][x] = "b"
-        canv.itemconfig(map2[y][x], fill="red")
-        bots[i][0] = y
-        bots[i][1] = x
+        gen_bot(i)
+        canv.itemconfig(map2[bots[i][0]][bots[i][1]], fill="red")
     for i in range(8):
-        for j in range(randint(1, 3)):
+        for j in range(6):
+            #canv.itemconfig(map2[bots[i][0]][bots[i][1]], fill="HotPink2")
             genomes[i][randint(0, 79)] = randint(0, 79)
 
 
@@ -210,8 +227,6 @@ def mutate():
 
 def mainfunc():
     global botnum, overload, turn_end, bots, genomes, alive  # Объявление глобальных переменных
-    if botnum == 0:
-        gen_food()  # Генерация еды
     flag = True
     while genomes[botnum][bots[botnum][4]] > 39:
         overload += 1
@@ -234,7 +249,6 @@ def mainfunc():
         if turn_end or overload == 10:  # Смена хода
             handover()
     root.after(1, mainfunc)
-print(*map1, sep="\n")
 
 mainfunc()
 mainloop()
