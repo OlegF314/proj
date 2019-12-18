@@ -8,14 +8,14 @@ HEIGHT = 27
 SIZE = 30
 MODES = 5
 MUTATION_STRENGTH = 5
-MAP = open("map.evo", "r")
+MAP = open("map0.evo", "r")
 root = Tk()
 canv = Canvas(root, width=1440, height=810, bg="black")
 canv.pack()
 flag1 = False
 lifetimes = []
-genomes = [[randint(32, 39) for i in range(80)] for j in range(64)]
-#[list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
+#genomes = [[randint(0, 79) for i in range(80)] for j in range(64)]
+genomes = [list(map(int, open("genom.evo", "r").readline().split())) for i in range(64)]
 bots = [[10 + i % 8, 20 + i // 8, 20, 0, 0] for i in range(64)]
 # [0] - y
 # [1] - x
@@ -46,8 +46,8 @@ for i in range(HEIGHT):
 
 
 def gen_bot(i):
-    y = randint(0, 26)
-    x = randint(0, 47)
+    y = randint(1, 25)
+    x = randint(1, 46)
     while map1[y][x] in ["*", "b"]:
         y = randint(1, 25)
         x = randint(1, 46)
@@ -181,7 +181,7 @@ def dead(bot):
 
 def gen_food():
     k = 0
-    while k != 1:
+    while k != 2:
         z = randint(0, 26)
         m = randint(0, 47)
         if map1[z][m] not in ["*", "b"]:
@@ -189,7 +189,7 @@ def gen_food():
             canv.itemconfig(map2[z][m], fill="green")
             k += 1
     k = 0
-    while k != 2:
+    while k != 5:
         z = randint(0, 26)
         m = randint(0, 47)
         if map1[z][m] not in ["*", "b"]:
@@ -214,7 +214,9 @@ def mutate():
         for j in range(1, 9):
             sys.stdout = open("outgenome" + str(j) + ".evo", "w")
             print(*genomes[j])
+        #graph = plt.subplot
         plt.plot(list(range(len(lifetimes))), lifetimes)
+        plt.grid()
         plt.show()
         sys.exit()
     for i in range(64):
@@ -224,7 +226,7 @@ def mutate():
         gen_bot(i)
         canv.itemconfig(map2[bots[i][0]][bots[i][1]], fill="red")
     for i in range(8):
-        for j in range(MUTATION_STRENGTH):
+        for j in range(randint(1, MUTATION_STRENGTH)):
             #canv.itemconfig(map2[bots[i][0]][bots[i][1]], fill="HotPink2")
             genomes[i][randint(0, 79)] = randint(0, 79)
     shuffle(genomes)
